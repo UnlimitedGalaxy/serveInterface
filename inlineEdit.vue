@@ -7,8 +7,9 @@
 			<el-table-column
 				label="id"
 				:width="90"
-				heade-align=centerprop="id">
+				heade-align=center
 				align=center
+				prop="id">
 			</el-table-column>
 			<el-table-column
 				label="type1"
@@ -57,10 +58,10 @@
 				<template scope="scope">
 					<el-button v-if="scope.row.edit"type="primary" icon="edit" size="small" @click="scope.row.edit=!scope.row.edit">编辑</el-button>
 					<el-button v-else="scope.row.edit" type="success" icon="check" size="small" @click="scope.row.edit=!scope.row.edit">完成</el-button>
+					<el-button type="danger" @click="deleteRow(scope.row)">删除</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
-		<input type="text" >
 	</div>
 </template>
 
@@ -85,21 +86,29 @@
 				});
 		},
 		methods: {
-			handleKeyup(e, row) {
+			handleKeyup(row) {
 				if (e.keyCode === 13) {
-					let dataIndex = 1;
 					row.edit = true
 					this.tableData.some((item, index) => {
 						if (item.id === row.id) {
-							dataIndex = index;
+							this.tableData.splice(index, 1, {...row});
 							return true;
 						} else {
 							return false;
 						}
 					});
-					this.tableData.splice(dataIndex, 1, {...row});
 				}
-			}
+			},
+			deleteRow(row) {
+				this.tableData.some((item, index) => {
+					if (item.id === row.id) {
+						this.tableData.splice(index, 1);
+						return true;
+					} else {
+						return false;
+					}
+				});
+			},
 		},
 	}
 </script>
